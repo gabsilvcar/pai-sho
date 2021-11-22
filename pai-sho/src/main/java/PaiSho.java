@@ -1,16 +1,10 @@
 package main.java;
 
 import main.java.visual.InterfacePaiSho;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.TransferHandler;
-import java.io.File;
 import java.io.IOException;
 
 
