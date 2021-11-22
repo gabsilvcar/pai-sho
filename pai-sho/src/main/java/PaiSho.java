@@ -41,9 +41,9 @@ public class PaiSho {
                 frame.setLocationByPlatform(true);
                 frame.setLocationRelativeTo(null);
 
-//
-//                String connection_adress = JOptionPane.showInputDialog(frame,
-//                        "Enter server adress or cancel to host a new game", null);
+
+                String connection_adress = JOptionPane.showInputDialog(frame,
+                        "Enter server adress or cancel to host a new game", null);
 
                 try {
                     var containerPane = new JPanel();
