@@ -19,7 +19,7 @@ public class PaiSho {
     public static ImageIcon icon2 = new ImageIcon(newimg);
     public static void main(String [] args) {
         int matrix_size = 17;
-        var imageIcon = new ImageIcon(resources_path + "iroh.jpg");
+        ImageIcon imageIcon = new ImageIcon(resources_path + "iroh.jpg");
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -28,7 +28,7 @@ public class PaiSho {
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 }
 
-                var frame = new JFrame(game_name);
+                JFrame frame = new JFrame(game_name);
 
                 frame.setIconImage(imageIcon.getImage());
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,10 +40,10 @@ public class PaiSho {
                         "Enter server adress or cancel to host a new game", null);
 
                 try {
-                    var containerPane = new JPanel();
+                    JPanel containerPane = new JPanel();
                     containerPane.setLayout(new GridBagLayout());
 
-                    var painel_interface = new InterfacePaiSho();
+                    InterfacePaiSho painel_interface = new InterfacePaiSho();
                     JButton add_piece_btn = new JButton("Adicionar uma peça");
                     add_piece_btn.addMouseListener(new MouseAdapter(){
                         @Override
@@ -63,7 +63,7 @@ public class PaiSho {
                         }
                     });
                     JLabel turn_info = new JLabel("É seu turno");
-                    var data_interface = new  JPanel();
+                    JPanel data_interface = new  JPanel();
                     JButton forfeit_btn = new JButton("Desistir");
                     add_piece_btn.addMouseListener(new MouseAdapter(){
                         @Override
