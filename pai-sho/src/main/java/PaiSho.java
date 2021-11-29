@@ -10,16 +10,16 @@ import java.io.IOException;
 
 public class PaiSho {
 
-    public static final String resources_path = "pai-sho/src/main/resources/";
+    public static final String resources_path = "/main/resources/";
     public static final String game_name = "Pai-sho";
     public static final int board_size = 612; //Pixel Size
-    public static ImageIcon icon = new ImageIcon(resources_path + "dark-lotus-tile.png");
+    public static ImageIcon icon = new ImageIcon(PaiSho.class.getClass().getResource((resources_path+"dark-lotus-tile.png" )));
     public static Image image = icon.getImage(); // transform it
     public static Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
     public static ImageIcon icon2 = new ImageIcon(newimg);
     public static void main(String [] args) {
         int matrix_size = 17;
-        ImageIcon imageIcon = new ImageIcon(resources_path + "iroh.jpg");
+        ImageIcon imageIcon = new ImageIcon(PaiSho.class.getClass().getResource(resources_path + "iroh.jpg"));
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

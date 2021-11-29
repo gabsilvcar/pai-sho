@@ -1,5 +1,7 @@
 package main.java.visual;
 
+import main.java.PaiSho;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -20,8 +22,8 @@ public class InterfacePaiSho extends JLayeredPane {
     private BufferedImage background;
     JButton button_to_change = null;
     public InterfacePaiSho() throws IOException {
-        File pathToFile = new File(resources_path + "board.png");
-        Image board = ImageIO.read(pathToFile).getScaledInstance(612, 612, Image.SCALE_SMOOTH);
+
+        Image board = ImageIO.read(this.getClass().getResource((resources_path + "board.png"))).getScaledInstance(612, 612, Image.SCALE_SMOOTH);
         BufferedImage buffered = new BufferedImage(612, 612, BufferedImage.TYPE_INT_ARGB);
         buffered.getGraphics().drawImage(board, 0, 0 , null);
 
@@ -29,9 +31,8 @@ public class InterfacePaiSho extends JLayeredPane {
         setLayout(null);
 
         setSize(getPreferredSize());
-        File pathToFile2 = new File(resources_path + "dark-lotus-tile.png");
-        BufferedImage tile = ImageIO.read(pathToFile2);
-        ImageIcon icon = new ImageIcon(resources_path + "dark-lotus-tile.png");
+
+        ImageIcon icon = new ImageIcon(this.getClass().getResource((resources_path+"dark-lotus-tile.png" )));
         Image image = icon.getImage(); // transform it
         Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         ImageIcon icon2 = new ImageIcon(newimg);
