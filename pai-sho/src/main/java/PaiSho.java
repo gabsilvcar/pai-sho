@@ -19,7 +19,7 @@ public class PaiSho {
     public static ImageIcon icon2 = new ImageIcon(newimg);
     public static void main(String [] args) {
         int matrix_size = 17;
-        ImageIcon imageIcon = new ImageIcon(PaiSho.class.getClass().getResource(resources_path + "iroh.jpg"));
+        final ImageIcon imageIcon = new ImageIcon(PaiSho.class.getClass().getResource(resources_path + "iroh.jpg"));
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -43,7 +43,7 @@ public class PaiSho {
                     JPanel containerPane = new JPanel();
                     containerPane.setLayout(new GridBagLayout());
 
-                    InterfacePaiSho painel_interface = new InterfacePaiSho();
+                    final InterfacePaiSho painel_interface = new InterfacePaiSho();
                     JButton add_piece_btn = new JButton("Adicionar uma peça");
                     add_piece_btn.addMouseListener(new MouseAdapter(){
                         @Override
@@ -62,7 +62,7 @@ public class PaiSho {
 
                         }
                     });
-                    JLabel turn_info = new JLabel("É seu turno");
+                    final JLabel turn_info = new JLabel("É seu turno");
                     JPanel data_interface = new  JPanel();
                     JButton forfeit_btn = new JButton("Desistir");
                     add_piece_btn.addMouseListener(new MouseAdapter(){

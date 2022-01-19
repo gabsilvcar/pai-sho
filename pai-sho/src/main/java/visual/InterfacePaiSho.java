@@ -41,7 +41,7 @@ public class InterfacePaiSho extends JLayeredPane {
             Font font1 = new Font("SansSerif", Font.BOLD, 20);
             int aux = 0;
             for (int j = k; j>0; j--){
-                JLabel point = new JLabel();
+                final JLabel point = new JLabel();
                 point.setText(".");
                 point.addMouseListener(new MouseAdapter() {
                     @Override
@@ -70,7 +70,7 @@ public class InterfacePaiSho extends JLayeredPane {
             Font font1 = new Font("SansSerif", Font.BOLD, 20);
             int aux = 0;
             for (int j = k; j>0; j--){
-                JLabel point = new JLabel();
+                final JLabel point = new JLabel();
                 point.setText(".");
                 point.addMouseListener(new MouseAdapter() {
                     @Override
@@ -100,7 +100,7 @@ public class InterfacePaiSho extends JLayeredPane {
             Font font1 = new Font("SansSerif", Font.BOLD, 20);
             int aux = 0;
             for (int j = k; j>0; j--){
-                JLabel point = new JLabel();
+                final JLabel point = new JLabel();
                 point.setText(".");
                 point.setFont(font1);
                 point.addMouseListener(new MouseAdapter() {
