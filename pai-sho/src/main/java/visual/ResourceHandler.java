@@ -34,5 +34,16 @@ public class ResourceHandler {
         return ResourceHandler.class.getClass().getResource(resources_path + resource_name);
     }
 
+    /**
+     * Retorna a imagem bufferizada
+     * @param name O nome da imagem a ser carregada
+     *
+     * @throws IOException Caso o caminho seja inválido
+     *
+     * @return A imagem pronta para ser utilizada
+     */
+    public static BufferedImage getBufferedImage(String name) throws IOException {
+        return ImageIO.read(getResource(name));
+    }
 
 }
