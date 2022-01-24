@@ -41,7 +41,7 @@ public class GameManager implements Runnable, PaiShoEventListener {
     }
 
     private Boolean addPiece(){
-        if (getCurrentPlayer().getInactivePieces() > 0){
+        if ((getCurrentPlayer().getInactivePieces() > 0) && (board.addPiece(getCurrentPlayerTag()))){
             getCurrentPlayer().addPiece();
             return true;
         } else{

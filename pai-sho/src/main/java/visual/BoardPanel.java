@@ -21,7 +21,7 @@ public class BoardPanel extends JPanel {
     private List<PaiShoEventListener> listeners = new ArrayList<PaiShoEventListener>();
     private BufferedImage[] boardBuffer = new BufferedImage[19];
     private BufferedImage application_frame;
-    private ImageIcon tile_icon;
+    private ImageIcon tile_icon, tile_icon_alt;
     int[][] boardMap = {
             {0, 0, 0, 0, 0, 0, 1, 12, 3, 3, 3, 18, 1, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 1, 1, 1, 1, 12, 3, 18, 1, 1, 1, 1, 0, 0, 0, 0},
@@ -89,6 +89,7 @@ public class BoardPanel extends JPanel {
     private void loadImages() {
         try{
             this.tile_icon = ResourceHandler.getImageIcon(ProjectResources.DARK_LOTUS_TILE);
+            this.tile_icon_alt = ResourceHandler.getImageIcon(ProjectResources.DARK_LOTUS_TILE_ALT);
             for (int i = 0; i < 19; i++) {
                 this.boardBuffer[i] = ResourceHandler.getBufferedImage(i + ".png");
             }
@@ -114,7 +115,6 @@ public class BoardPanel extends JPanel {
 
     public void addPiece(PlayerNumber number){
         JButton piece = new JButton();
-        piece.setIcon(tile_icon);
         piece.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -123,9 +123,11 @@ public class BoardPanel extends JPanel {
         });
         switch (number){
             case PLAYER_ONE:
+                piece.setIcon(tile_icon);
                 piece.setBounds(295, 70, 20, 20);
                 break;
             case PLAYER_TWO:
+                piece.setIcon(tile_icon_alt);
                 piece.setBounds(295, 550, 20, 20);
                 break;
         }

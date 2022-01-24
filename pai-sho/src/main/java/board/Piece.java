@@ -1,14 +1,18 @@
 package main.java.board;
 
+import main.java.board.enums.PlayerNumber;
+
 import javax.swing.text.Position;
 
 public class Piece {
     protected Position position;
     protected boolean canAttack;
+    protected PlayerNumber playerNumber;
 
 
-    public Piece(){
+    public Piece(PlayerNumber playerNumber){
         this.canAttack = true;
+        this.playerNumber = playerNumber;
     }
 
     /**
