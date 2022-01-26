@@ -1,22 +1,16 @@
 package main.java;
 
-import main.java.visual.InterfacePaiSho;
-import javax.swing.*;
+import main.java.board.Board;
+import main.java.board.LocalPlayer;
+
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.util.logging.Logger;
 
 
 public class PaiSho {
-
-    public static final String resources_path = "/main/resources/";
     public static final String game_name = "Pai-sho";
-    public static final int board_size = 612; //Pixel Size
-    public static ImageIcon icon = new ImageIcon(PaiSho.class.getClass().getResource((resources_path+"dark-lotus-tile.png" )));
-    public static Image image = icon.getImage(); // transform it
-    public static Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-    public static ImageIcon icon2 = new ImageIcon(newimg);
+    public static Logger logger = Logger.getLogger(game_name);
+
     public static void main(String [] args) {
         int matrix_size = 17;
         final ImageIcon imageIcon = new ImageIcon(PaiSho.class.getClass().getResource(resources_path + "iroh.jpg"));
@@ -111,5 +105,13 @@ public class PaiSho {
                 frame.setVisible(true);
             }
         });
+        LocalPlayer localPlayer1 = new LocalPlayer();
+        LocalPlayer localPlayer2 = new LocalPlayer();//TODO Adicionar interface para usuário remoto(netgames)
+        Board board = new Board();
+        localPlayer1.setTurn(true);
+        GameManager manager = new GameManager(board, localPlayer1, localPlayer2);
+        EventQueue.invokeLater(manager);
+
     }
+
 }

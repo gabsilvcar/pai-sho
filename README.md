@@ -8,7 +8,7 @@ Implementação do jogo de tabuleiro Pai Sho seguindo os principios da engenhari
 
 
 ### Requisitos
-Java 15
+Java 8
 
 ### Downloads
 Entrega 1 - Apenas Interface - https://github.com/Cardoz-0/Pai-Sho/releases/tag/Entrega01
