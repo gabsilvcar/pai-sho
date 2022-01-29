@@ -7,6 +7,7 @@ public class Board {
     protected Position[][] positions;
     private static final int size = 19;
     private static final int matrix_offset = size/2;
+    protected Player player1, player2; //TODO
 
     /**
      * Classe encarregada de cuidar das operações que ocorrem na matriz do tabuleiro

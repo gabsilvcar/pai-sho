@@ -15,12 +15,13 @@ import java.util.List;
 public class MenuPanel extends JPanel {
     protected List<PaiShoEventListener> listeners = new ArrayList<PaiShoEventListener>();
     private JLabel turn_info;
+    protected List<JButton> buttons = new ArrayList<JButton>();
     public MenuPanel(){
         setSize(100, 304);
         setBackground(Color.WHITE);
         setLayout(null);
         setDoubleBuffered(true);
-        this.turn_info = new JLabel("É seu turno", SwingConstants.CENTER);
+        this.turn_info = new JLabel("Aguardando jogo começar", SwingConstants.CENTER);
 
         JButton add_piece_btn = new JButton("Adicionar uma peça");
         add_piece_btn.addMouseListener(new MouseAdapter(){
@@ -35,7 +36,6 @@ public class MenuPanel extends JPanel {
         forfeit_btn.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                turn_info.setText("Você desistiu");
                 for (PaiShoEventListener el : listeners)
                     el.forfeitEvent();
             }
@@ -54,7 +54,6 @@ public class MenuPanel extends JPanel {
         btn_start.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                turn_info.setText("O jogo começou");
                 for (PaiShoEventListener el : listeners)
                     el.startGameEvent();
             }
@@ -70,6 +69,9 @@ public class MenuPanel extends JPanel {
         this.add(add_piece_btn);
         this.add(forfeit_btn);
         this.add(btn_start);
+        this.buttons.add(add_piece_btn);
+        this.buttons.add(forfeit_btn);
+        this.buttons.add(btn_start);
 //        this.add(change_player);
 
 
@@ -84,12 +86,15 @@ public class MenuPanel extends JPanel {
         listeners.add(toAdd);
     }
 
-    public void sendWarningMessage(String msg){
+    public void sendMessage(String msg, Color color){
         turn_info.setText(msg);
-        turn_info.setForeground(Color.RED);
+        turn_info.setForeground(color);
     }
-    public void sendMessage(String msg){
-        turn_info.setText(msg);
-        turn_info.setForeground(Color.BLACK);
+
+    public void setEnableButtons(Boolean enable) {
+        for (JButton button: this.buttons) {
+            button.setEnabled(enable);
+        }
     }
+
 }

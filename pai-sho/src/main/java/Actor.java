@@ -1,6 +1,6 @@
 package main.java;
 
-public interface Player {
+public interface Actor {
     void setTurn(Boolean flag);
     Boolean isTurn();
     void setManager(GameManager manager);

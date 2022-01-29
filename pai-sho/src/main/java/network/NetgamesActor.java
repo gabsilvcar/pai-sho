@@ -26,20 +26,13 @@ public class NetgamesActor implements OuvidorProxy {
     }
 
     public String conectar(String servidor, String nome) {
-
         try {
             proxy.conectar(servidor, nome);
         } catch (JahConectadoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
             return "Voce ja esta conectado";
         } catch (NaoPossivelConectarException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
             return "Nao foi possivel conectar";
         } catch (ArquivoMultiplayerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
             return "Voce esqueceu o arquivo de propriedades";
         }
         this.setConnected(true);
@@ -58,6 +51,7 @@ public class NetgamesActor implements OuvidorProxy {
     }
 
     public void iniciarPartida() {
+
         try {
             proxy.iniciarPartida(new Integer(2));
         } catch (NaoConectadoException e) {
@@ -68,6 +62,9 @@ public class NetgamesActor implements OuvidorProxy {
 
     @Override
     public void iniciarNovaPartida(Integer posicao) {
+        manager.setPlayerNumbers(posicao);
+        manager.setupGame();
+
         int indiceAdversario = 1;
         if (posicao.equals(1)) indiceAdversario = 2;
         String adversario = proxy.obterNomeAdversario(indiceAdversario);
