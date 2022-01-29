@@ -2,33 +2,38 @@ package main.java.board;
 
 //TODO NETGAMES AQUI
 public class RemotePlayer implements Player{
-    @Override
+    private String name;
+    private int active_pieces, inactive_pieces, lost_pieces;
+    boolean winner;
+    private boolean turn;
+
+    public RemotePlayer(){
+        this.turn = false;
+        this.inactive_pieces = 8;
+    }
+
     public void setTurn(Boolean flag) {
-
+        this.turn = flag;
     }
 
-    @Override
     public Boolean isTurn() {
-        return null;
+        return this.turn;
     }
 
-    @Override
+    public int getInactivePieces(){
+        return inactive_pieces;
+    }
+
+    public int getActivePieces(){
+        return active_pieces;
+    }
+
+    public int getLostPieces(){
+        return lost_pieces;
+    }
+
     public void addPiece() {
-
-    }
-
-    @Override
-    public int getInactivePieces() {
-        return 0;
-    }
-
-    @Override
-    public int getActivePieces() {
-        return 0;
-    }
-
-    @Override
-    public int getLostPieces() {
-        return 0;
+        inactive_pieces--;
+        active_pieces++;
     }
 }

@@ -3,18 +3,22 @@ package main.java;
 import main.java.board.Board;
 import main.java.board.Player;
 import main.java.board.enums.PlayerNumber;
+import main.java.network.GameMove;
+import main.java.network.NetgamesActor;
 import main.java.visual.GameFrame;
 import main.java.visual.events.PaiShoEventListener;
 
 public class GameManager implements Runnable, PaiShoEventListener {
-    protected Board board;
+    protected Board board; //tabuleiro
     protected Player player1, player2;
-    protected GameFrame interfacePaiSho;
+    protected GameFrame interfacePaiSho; //gui
+    protected NetgamesActor server;
 
     public GameManager(Board board, Player player1, Player player2){
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
+        this.server = new NetgamesActor();
     }
 
     private Player getCurrentPlayer(){
@@ -23,6 +27,10 @@ public class GameManager implements Runnable, PaiShoEventListener {
         } else {
             return player2;
         }
+    }
+
+    public void receive_move(GameMove move){
+
     }
 
     private PlayerNumber getCurrentPlayerTag(){

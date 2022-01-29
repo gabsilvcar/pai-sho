@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ResourceHandler {
-    private static final String resources_path = "/main/resources/";
+    public static final String resources_path = "/main/resources/";
     /**
      * Retorna um ícone
      * @param resource O recurso a ser carregado
