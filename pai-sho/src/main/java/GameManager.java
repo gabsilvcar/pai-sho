@@ -18,15 +18,15 @@ public class GameManager implements Runnable {
     }
 
     public void nextMove(Move move) {
-        if(local_player.isTurn()){
-            if (move.executeMove(board)){
-                move.render(local_player.gui);
-                remote_player.netgames.enviarJogada(move);
-                swapTurns();
-            } else {
-                System.out.println("Invalido");
-            }
+        if (move.executeMove(board)){
+            move.render(local_player.gui);
+
+            remote_player.netgames.enviarJogada(move);
+            swapTurns();
+        } else {
+            System.out.println("Invalido");
         }
+
     }
 
     private void swapTurns() {

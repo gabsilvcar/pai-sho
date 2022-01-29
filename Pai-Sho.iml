@@ -81,21 +81,14 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/pai-sho/netgames/NetGamesFileOffline.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/pai-sho/netgames/ngnrtFramework.jar!/" />
+          <root url="file://$MODULE_DIR$/netgames" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/pai-sho/netgames/ngnrtFramework.jar!/" />
+          <root url="file://$MODULE_DIR$/netgames" />
         </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/netgames" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/netgames" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>
