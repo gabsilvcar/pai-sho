@@ -21,6 +21,7 @@ public class RemotePlayer implements Player {
 
     public void setManager(GameManager manager) {
         this.manager = manager;
+        this.netgames.defineManager(manager);
     }
 
     public void setTurn(Boolean flag) {
