@@ -1,8 +1,7 @@
 package main.java;
 
 import main.java.board.Board;
-import main.java.board.LocalPlayer;
-import main.java.board.RemotePlayer;
+import main.java.board.enums.PlayerNumber;
 
 import java.awt.*;
 import java.util.logging.Logger;
@@ -13,8 +12,8 @@ public class PaiSho {
     public static Logger logger = Logger.getLogger(game_name);
 
     public static void main(String [] args) {
-        LocalPlayer localPlayer1 = new LocalPlayer();
-        RemotePlayer localPlayer2 = new RemotePlayer();//TODO Adicionar interface para usuário remoto(netgames)
+        LocalPlayer localPlayer1 = new LocalPlayer(PlayerNumber.PLAYER_ONE);
+        RemotePlayer localPlayer2 = new RemotePlayer(PlayerNumber.PLAYER_TWO);
         Board board = new Board();
         localPlayer1.setTurn(true);
         GameManager manager = new GameManager(board, localPlayer1, localPlayer2);

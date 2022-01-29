@@ -5,6 +5,7 @@ import br.ufsc.inf.leobr.cliente.OuvidorProxy;
 import br.ufsc.inf.leobr.cliente.Proxy;
 import br.ufsc.inf.leobr.cliente.exception.*;
 import main.java.GameManager;
+import main.java.moveset.Move;
 
 public class NetgamesActor implements OuvidorProxy {
 
@@ -24,7 +25,7 @@ public class NetgamesActor implements OuvidorProxy {
         this.manager = manager;
     }
 
-    public String connect(String servidor, String nome) {
+    public String conectar(String servidor, String nome) {
 
         try {
             proxy.conectar(servidor, nome);
@@ -46,7 +47,7 @@ public class NetgamesActor implements OuvidorProxy {
 
     }
 
-    public void desconnect() {
+    public void desconectar() {
         try {
             proxy.desconectar();
         } catch (NaoConectadoException e) {
@@ -56,7 +57,7 @@ public class NetgamesActor implements OuvidorProxy {
         this.setConnected(false);
     }
 
-    public void startGame() {
+    public void iniciarPartida() {
         try {
             proxy.iniciarPartida(new Integer(2));
         } catch (NaoConectadoException e) {
@@ -85,7 +86,7 @@ public class NetgamesActor implements OuvidorProxy {
 
     @Override
     public void receberJogada(Jogada jogada) {
-        manager.receive_move((GameMove) jogada);
+        manager.nextMove((Move) jogada);
     }
 
 
@@ -101,7 +102,7 @@ public class NetgamesActor implements OuvidorProxy {
 
     }
 
-    public void enviarJogada(GameMove move) {
+    public void enviarJogada(Move move) {
         try {
             proxy.enviaJogada(move);
         } catch (NaoJogandoException e) {

@@ -1,6 +1,6 @@
 package main.java.visual;
 
-import main.java.visual.events.PaiShoEventListener;
+import main.java.PaiShoEventListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,10 +9,11 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Painel interagível com botões
+ */
 public class MenuPanel extends JPanel {
-    private List<PaiShoEventListener> listeners = new ArrayList<PaiShoEventListener>();
-
+    protected List<PaiShoEventListener> listeners = new ArrayList<PaiShoEventListener>();
     private JLabel turn_info;
     public MenuPanel(){
         setSize(100, 304);
@@ -39,15 +40,15 @@ public class MenuPanel extends JPanel {
                     el.forfeitEvent();
             }
         });
-        JButton change_player = new JButton("Passar Turno");
-        change_player.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                turn_info.setText("Turno do oponente");
-                for (PaiShoEventListener el : listeners)
-                    el.nextTurnEvent();
-            }
-        });
+//        JButton change_player = new JButton("Passar Turno");
+//        change_player.addMouseListener(new MouseAdapter(){
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                turn_info.setText("Turno do oponente");
+//                for (PaiShoEventListener el : listeners)
+//                    el.nextTurnEvent();
+//            }
+//        });
 
         JButton btn_start = new JButton("Iniciar");
         btn_start.addMouseListener(new MouseAdapter(){
@@ -62,14 +63,14 @@ public class MenuPanel extends JPanel {
         add_piece_btn.setBounds(700, 100, 200, 60);
         forfeit_btn.setBounds(700, 220, 200, 60);
         btn_start.setBounds(700, 340, 200, 60);
-        change_player.setBounds(700, 460, 200, 60);
+//        change_player.setBounds(700, 460, 200, 60);
 
 
         this.add(turn_info);
         this.add(add_piece_btn);
         this.add(forfeit_btn);
         this.add(btn_start);
-        this.add(change_player);
+//        this.add(change_player);
 
 
     }

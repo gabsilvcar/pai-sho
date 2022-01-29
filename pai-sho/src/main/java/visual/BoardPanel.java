@@ -1,8 +1,8 @@
 package main.java.visual;
 
 import main.java.PaiSho;
+import main.java.PaiShoEventListener;
 import main.java.board.enums.PlayerNumber;
-import main.java.visual.events.PaiShoEventListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.logging.Level;
 
 
+/**
+ * Painel onde há o tabuleiro, nele o usuário pode interagir com as peças
+ */
 public class BoardPanel extends JPanel {
 
     private List<PaiShoEventListener> listeners = new ArrayList<PaiShoEventListener>();
@@ -148,6 +151,9 @@ public class BoardPanel extends JPanel {
         piece.setBounds(x, y, 20, 20);
         this.add(piece, this);
         this.repaint();
+    }
+    public void addListener(PaiShoEventListener toAdd) {
+        listeners.add(toAdd);
     }
 
 }

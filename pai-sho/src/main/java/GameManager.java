@@ -1,91 +1,55 @@
 package main.java;
 
 import main.java.board.Board;
-import main.java.board.Player;
-import main.java.board.enums.PlayerNumber;
-import main.java.network.GameMove;
-import main.java.network.NetgamesActor;
-import main.java.visual.GameFrame;
-import main.java.visual.events.PaiShoEventListener;
+import main.java.moveset.Move;
 
-public class GameManager implements Runnable, PaiShoEventListener {
-    protected Board board; //tabuleiro
-    protected Player player1, player2;
-    protected GameFrame interfacePaiSho; //gui
-    protected NetgamesActor server;
+public class GameManager implements Runnable {
+    protected Board board;
+    protected LocalPlayer local_player;
+    protected RemotePlayer remote_player;
 
-    public GameManager(Board board, Player player1, Player player2){
+
+    public GameManager(Board board, LocalPlayer local_player, RemotePlayer remote_player){
         this.board = board;
-        this.player1 = player1;
-        this.player2 = player2;
-        this.server = new NetgamesActor();
+        this.local_player = local_player;
+        this.remote_player = remote_player;
+        local_player.setManager(this);
+        remote_player.setManager(this);
     }
 
-    private Player getCurrentPlayer(){
-        if (player1.isTurn()){
-            return player1;
-        } else {
-            return player2;
+    public void nextMove(Move move) {
+        if(local_player.isTurn()){
+            if (move.executeMove(board)){
+                move.render(local_player.gui);
+                remote_player.netgames.enviarJogada(move);
+                swapTurns();
+            } else {
+                System.out.println("Invalido");
+            }
         }
     }
 
-    public void receive_move(GameMove move){
-
+    private void swapTurns() {
+        local_player.setTurn(local_player.isTurn());
+        remote_player.setTurn(!remote_player.isTurn());
     }
 
-    private PlayerNumber getCurrentPlayerTag(){
-        if (player1.isTurn()){
-            return PlayerNumber.PLAYER_ONE;
-        } else {
-            return PlayerNumber.PLAYER_TWO;
-        }
+    public void startConnection(String address, String name) {
+        String info = remote_player.netgames.conectar(address, name);
+        local_player.showWarning(info);
     }
 
-
-    private void swapTurns(){
-        player2.setTurn(player1.isTurn());
-        player1.setTurn(!player1.isTurn());
-
+    public void stopConnection() {
+        remote_player.netgames.desconectar();
+        local_player.showWarning("Conexão encerrada");
     }
 
-    private Boolean addPiece(){
-        if ((getCurrentPlayer().getInactivePieces() > 0) && (board.addPiece(getCurrentPlayerTag()))){
-            getCurrentPlayer().addPiece();
-            return true;
-        } else{
-            return false;
-        }
+    public void startGame() {
+        remote_player.netgames.iniciarPartida();
     }
 
     @Override
     public void run() {
-        this.interfacePaiSho = new GameFrame();
-        interfacePaiSho.addListener(this);
-    }
-
-    @Override
-    public void addPieceEvent() {
-        if (addPiece()){
-            this.interfacePaiSho.addPiece(getCurrentPlayerTag());
-            this.interfacePaiSho.sendWarningMessage("Peça adicionada - Passando o turno");
-            this.swapTurns();
-        }else{
-            this.interfacePaiSho.sendWarningMessage("Não foi possível adicionar uma peça");
-        };
-    }
-
-    @Override
-    public void forfeitEvent() {
-
-    }
-
-    @Override
-    public void nextTurnEvent() {
-
-    }
-
-    @Override
-    public void startGameEvent() {
 
     }
 }

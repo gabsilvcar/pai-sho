@@ -1,6 +1,7 @@
 package main.java.board;
 
 import main.java.board.enums.PlayerNumber;
+import main.java.PaiShoEventListener;
 
 public class Board {
     protected Position[][] positions;
@@ -60,7 +61,7 @@ public class Board {
     }
     /**
      * Cria uma peça nova para o jogador no evento de uma nova peça ser adicionada ao tabuleiro
-     * @see main.java.visual.events.PaiShoEventListener
+     * @see PaiShoEventListener
      */
     public boolean addPiece(PlayerNumber playerNumber) {
         switch (playerNumber) {

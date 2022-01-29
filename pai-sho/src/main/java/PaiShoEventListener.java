@@ -1,8 +1,9 @@
-package main.java.visual.events;
+package main.java;
 
 public interface PaiShoEventListener {
     void addPieceEvent();
     void forfeitEvent();
-    void nextTurnEvent();
     void startGameEvent();
+    void connectionEvent(String address, String name);
+    void disconnectionEvent();
 }
