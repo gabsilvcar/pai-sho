@@ -20,7 +20,6 @@ public class GameManager implements Runnable {
     public void nextMove(Move move) {
         if (move.executeMove(board)){
             move.render(local_player.gui);
-
             remote_player.netgames.enviarJogada(move);
             swapTurns();
         } else {
