@@ -5,23 +5,21 @@ import main.java.moveset.AddPiece;
 import main.java.visual.GameFrame;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Ator local do jogo
  */
-public class LocalPlayer implements Player, PaiShoEventListener {
+public class LocalActor implements Actor, PaiShoEventListener {
     protected String name;
-    protected int active_pieces, inactive_pieces, lost_pieces;
     boolean winner;
     protected boolean turn;
     protected GameFrame gui;
     protected PlayerNumber playerNumber;
     protected GameManager manager;
 
-    public LocalPlayer(PlayerNumber playerNumber) {
+    public LocalActor(PlayerNumber playerNumber) {
         this.gui = new GameFrame();
-        this.turn = false;
-        this.inactive_pieces = 8;
         this.playerNumber = playerNumber;
         this.addListenerToGui(this);
     }
@@ -35,6 +33,14 @@ public class LocalPlayer implements Player, PaiShoEventListener {
     }
 
     public void setTurn(Boolean flag) {
+        if (flag) {
+            gui.sendMessage("É seu turno", Color.GREEN);
+            gui.menuPanel.setEnableButtons(true);
+        } else {
+            gui.sendMessage("Esperando jogada do adversário", Color.RED);
+            gui.menuPanel.setEnableButtons(false);
+
+        }
         this.turn = flag;
     }
 
@@ -44,11 +50,7 @@ public class LocalPlayer implements Player, PaiShoEventListener {
 
     @Override
     public void addPieceEvent() {
-        if (inactive_pieces > 0) {
-            inactive_pieces--;
-            active_pieces++;
-            manager.nextMove(new AddPiece(this.playerNumber));
-        }
+        manager.nextMove(new AddPiece(this.playerNumber));
     }
 
     @Override

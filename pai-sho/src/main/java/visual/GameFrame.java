@@ -5,6 +5,7 @@ import main.java.PaiShoEventListener;
 import main.java.board.enums.PlayerNumber;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -89,11 +90,7 @@ public class GameFrame extends JFrame {
         boardPanel.addPiece(player_number);
     }
 
-    public void sendWarningMessage(String msg){
-        menuPanel.sendWarningMessage(msg);
-    }
-
-    public void sendMessage(String msg){
-        menuPanel.sendMessage(msg);
+    public void sendMessage(String msg, Color color){
+        menuPanel.sendMessage(msg, color);
     }
 }

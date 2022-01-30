@@ -6,14 +6,14 @@ import main.java.network.NetgamesActor;
 /**
  * Ator remoto do jogo
  */
-public class RemotePlayer implements Player {
+public class RemoteActor implements Actor {
     protected String name;
     protected boolean turn;
     protected PlayerNumber playerNumber;
     protected GameManager manager;
     protected NetgamesActor netgames;
 
-    public RemotePlayer(PlayerNumber playerNumber){
+    public RemoteActor(PlayerNumber playerNumber){
         this.turn = false;
         this.playerNumber = playerNumber;
         this.netgames = new NetgamesActor();
@@ -21,6 +21,7 @@ public class RemotePlayer implements Player {
 
     public void setManager(GameManager manager) {
         this.manager = manager;
+        this.netgames.defineManager(manager);
     }
 
     public void setTurn(Boolean flag) {
