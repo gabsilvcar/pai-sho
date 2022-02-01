@@ -4,7 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 
 public class ResourceHandler {
     public static final String resources_path = "/main/resources/";
@@ -14,8 +14,8 @@ public class ResourceHandler {
      *
      * @return A imagem pronta para ser utilizada
      */
-    public static ImageIcon getImageIcon(ProjectResources resource) {
-        return new ImageIcon(getResource(resource.value));
+    public static ImageIcon getImageIcon(ProjectResources resource) throws IOException {
+        return new ImageIcon(ImageIO.read(getResource(resource.value)));
     }
 
     /**
@@ -30,8 +30,13 @@ public class ResourceHandler {
         return ImageIO.read(getResource(resource.value));
     }
 
-    private static URL getResource(String resource_name){
-        return ResourceHandler.class.getClass().getResource(resources_path + resource_name);
+    private static InputStream getResource(String resource_name){
+        InputStream input = ResourceHandler.class.getResourceAsStream(resources_path + resource_name);
+        if (input == null) {
+            input = ResourceHandler.class.getClassLoader().getResourceAsStream(resource_name);
+        }
+
+        return input;
     }
 
     /**
