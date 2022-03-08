@@ -17,6 +17,8 @@ import java.util.logging.Level;
 
 
 /**
+ * PainelTabuleiro
+ *
  * Painel onde há o tabuleiro, nele o usuário pode interagir com as peças
  */
 public class BoardPanel extends JPanel {
@@ -24,8 +26,13 @@ public class BoardPanel extends JPanel {
     private List<PaiShoEventListener> listeners = new ArrayList<PaiShoEventListener>();
     private BufferedImage[] boardBuffer = new BufferedImage[19];
     private BufferedImage application_frame;
-    private ImageIcon tile_icon, tile_icon_alt;
-    int[][] boardMap = {
+    private ImageIcon tile_icon;
+    private ImageIcon tile_icon_alt;
+    private boolean pieceMoving = false;
+    private TileButton selectedPiece;
+    private final static int icon_size = 30;
+    private final static int icon_offset = 2;
+    public final static int[][] boardMap = {
             {0, 0, 0, 0, 0, 0, 1, 12, 3, 3, 3, 18, 1, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 1, 1, 1, 1, 12, 3, 18, 1, 1, 1, 1, 0, 0, 0, 0},
             {0, 0, 0, 1, 1, 1, 1, 1, 1, 15, 1, 1, 1, 1, 1, 1, 0, 0, 0},
@@ -55,31 +62,25 @@ public class BoardPanel extends JPanel {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println(e.getX());
-                System.out.println(e.getY());
-                buttomTest((e.getX()/32)*32+7, (e.getY()/32)*32+7);
-
+                System.out.println(pieceMoving);
+                if(pieceMoving){
+                    pieceMoving = false;
+                    for (PaiShoEventListener el : listeners)
+                        el.movePieceEvent(selectedPiece, pixelToCoordinate(e.getX()), pixelToCoordinate(e.getY()));
+                }
             }
 
             @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-
-            }
+            public void mousePressed(MouseEvent mouseEvent) {}
 
             @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-
-            }
+            public void mouseReleased(MouseEvent mouseEvent) {}
 
             @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-
-            }
+            public void mouseEntered(MouseEvent mouseEvent) {}
 
             @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-
-            }
+            public void mouseExited(MouseEvent mouseEvent) {}
         });
     }
 
@@ -89,10 +90,14 @@ public class BoardPanel extends JPanel {
         drawBoard(g);
     }
 
+    /**
+     * CarregarImagens
+     * Carrega os recursos em RAM para que não sejam acessados durante o jogo
+     */
     private void loadImages() {
         try{
-            this.tile_icon = ResourceHandler.getImageIcon(ProjectResources.DARK_LOTUS_TILE);
-            this.tile_icon_alt = ResourceHandler.getImageIcon(ProjectResources.DARK_LOTUS_TILE_ALT);
+            this.tile_icon = new ImageIcon(ResourceHandler.getBufferedImage(ProjectResources.DARK_LOTUS_TILE).getScaledInstance( 30, 30,  java.awt.Image.SCALE_SMOOTH )) ;
+            this.tile_icon_alt = new ImageIcon(ResourceHandler.getBufferedImage(ProjectResources.DARK_LOTUS_TILE_ALT).getScaledInstance( 30, 30,  java.awt.Image.SCALE_SMOOTH )) ;
             for (int i = 0; i < 19; i++) {
                 this.boardBuffer[i] = ResourceHandler.getBufferedImage(i + ".png");
             }
@@ -102,7 +107,11 @@ public class BoardPanel extends JPanel {
         }
 
     }
-
+    /**
+     * DesenharTabuleiro
+     * Cria o tabuleiro através das várias peças disponíveis na pasta resources,
+     * utiliza a variavel boardmap para fazer isso
+     */
     private void drawBoard(Graphics g){
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -116,44 +125,59 @@ public class BoardPanel extends JPanel {
         g2.drawImage(application_frame, 0, 0, 608, 608,null);
     }
 
-    public void addPiece(PlayerNumber number){
-        JButton piece = new JButton();
-        piece.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("click - adam sandlers");
-            }
-        });
-        switch (number){
-            case PLAYER_ONE:
-                piece.setIcon(tile_icon);
-                piece.setBounds(295, 70, 20, 20);
-                break;
-            case PLAYER_TWO:
-                piece.setIcon(tile_icon_alt);
-                piece.setBounds(295, 550, 20, 20);
-                break;
+    /**
+     * Equivalente ao AdicionarPeça
+     * Adiciona uma peça ao tabuleiro em qualquer posição,
+     * é uma versão mais generalizada do AdicionarPeça previsto nos diagramas
+     */
+    public void createTile(int x, int y, PlayerNumber playerNumber){
+        TileButton piece = new TileButton(x,y);
+        if(playerNumber.equals(PlayerNumber.PLAYER_ONE)){
+            piece.setIcon(tile_icon);
+        } else {
+            piece.setIcon(tile_icon_alt);
         }
-
-        this.add(piece, this);
-        this.repaint();
-    }
-
-    public void buttomTest(int x, int y){
-        JButton piece = new JButton();
-        piece.setIcon(tile_icon);
         piece.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("click - adam sandlers");
+            if (pieceMoving) {
+                for (PaiShoEventListener el : listeners)
+                    el.movePieceEvent(selectedPiece, piece);
+                pieceMoving = false;
+                selectedPiece = null;
+            } else {
+                selectedPiece = piece;
+                pieceMoving = true;
+            }
             }
         });
-        piece.setBounds(x, y, 20, 20);
+        piece.setBounds(coordToPixel(x)+icon_offset, coordToPixel(y)+icon_offset, icon_size, icon_size);
         this.add(piece, this);
         this.repaint();
     }
+
+    /**
+     * AddListener
+     * Adiciona o event listener que alertará as classes que um evento está ocorrendo
+     */
     public void addListener(PaiShoEventListener toAdd) {
         listeners.add(toAdd);
+    }
+
+    /**
+     * PixelParaCoordenadas
+     * Transforma posições do painel da interface grafica em uma posição equivalente no tabuleiro
+     */
+    private int pixelToCoordinate(int pixel) {
+        return (pixel/32)-9;
+    }
+
+    /**
+     * CoordenadasParaPixel
+     * Transforma posições do tabuleiro em uma posição na interface grafica
+     */
+    private int coordToPixel(int coord) {
+        return (coord+9)*32;
     }
 
 }

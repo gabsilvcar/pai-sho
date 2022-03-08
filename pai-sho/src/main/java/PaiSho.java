@@ -6,7 +6,9 @@ import main.java.board.enums.PlayerNumber;
 import java.awt.*;
 import java.util.logging.Logger;
 
-
+/**
+ * Classe main, inicializa as classes necessárias para o jogo começar
+ */
 public class PaiSho {
     public static final String game_name = "Pai-sho";
     public static Logger logger = Logger.getLogger(game_name);

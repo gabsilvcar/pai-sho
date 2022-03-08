@@ -52,7 +52,7 @@ public class Board {
      *
      * @return Um booleano indicando a validez da ação (falso caso a posição já esteja ocupada)
      */
-    private boolean addPieceInPos(int x, int y, Piece piece) {
+    public boolean addPieceInPos(int x, int y, Piece piece) {
         if(checkIfPosIsOccupied(x, y)) {
             return false;
         } else {
@@ -98,6 +98,10 @@ public class Board {
         return this.positions[x+matrix_offset][y+matrix_offset].getPiece();
     }
 
+    private boolean checkIfPiecesAreFromDifferentPlayers(int x1, int y1, int x2, int y2) {
+        return (getPiece(x1, y1).playerNumber != getPiece(x2, y2).playerNumber);
+    }
+
     /**
      * Move uma peça para uma posição do tabuleiro
      *
@@ -108,12 +112,21 @@ public class Board {
      *
      * @return True se o movimento é válido
      */
-    public boolean movePiece(int x1, int y1, int x2, int y2){ //TODO CONQUISTAR PEÇA INIMIGA
-        if((checkIfPosIsOccupied(x1, y1)) && (!checkIfPosIsOccupied(x2,y2)) && checkMovementValidity(x1,y1,x2,y2)){
+    public boolean movePiece(int x1, int y1, int x2, int y2) {
+        //Caso para movimentos normais (sem conquistar peça)
+        if ((checkIfPosIsOccupied(x1, y1)) && (!checkIfPosIsOccupied(x2,y2)) && checkMovementValidity(x1,y1,x2,y2)) {
             this.positions[x2+matrix_offset][y2+matrix_offset].occupyPostition(getPiece(x1,y1));
             getPosition(x1,y1).freePosition();
             return true;
         }
+        //Caso para movimentos que conquistam uma peça
+        if ((checkIfPosIsOccupied(x1, y1)) && (checkIfPosIsOccupied(x2,y2)) && (checkIfPiecesAreFromDifferentPlayers(x1, y1, x2, y2))) {
+            getPosition(x2,y2).freePosition();
+            this.positions[x2+matrix_offset][y2+matrix_offset].occupyPostitionAndTakePiece(getPiece(x1,y1));
+            getPosition(x1,y1).freePosition();
+            return true;
+        }
+        System.out.println(checkIfPiecesAreFromDifferentPlayers(x1, y1, x2, y2) + "AAA");
         return false;
     }
 

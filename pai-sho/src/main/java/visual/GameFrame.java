@@ -2,7 +2,6 @@ package main.java.visual;
 
 import main.java.PaiSho;
 import main.java.PaiShoEventListener;
-import main.java.board.enums.PlayerNumber;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,10 +83,6 @@ public class GameFrame extends JFrame {
         menuPanel.addListener(toAdd);
         boardPanel.addListener(toAdd);
         this.listeners.add(toAdd);
-    }
-
-    public void addPiece(PlayerNumber player_number){
-        boardPanel.addPiece(player_number);
     }
 
     public void sendMessage(String msg, Color color){

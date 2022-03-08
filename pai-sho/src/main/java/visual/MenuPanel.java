@@ -40,15 +40,6 @@ public class MenuPanel extends JPanel {
                     el.forfeitEvent();
             }
         });
-//        JButton change_player = new JButton("Passar Turno");
-//        change_player.addMouseListener(new MouseAdapter(){
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                turn_info.setText("Turno do oponente");
-//                for (PaiShoEventListener el : listeners)
-//                    el.nextTurnEvent();
-//            }
-//        });
 
         JButton btn_start = new JButton("Iniciar");
         btn_start.addMouseListener(new MouseAdapter(){
@@ -62,8 +53,6 @@ public class MenuPanel extends JPanel {
         add_piece_btn.setBounds(700, 100, 200, 60);
         forfeit_btn.setBounds(700, 220, 200, 60);
         btn_start.setBounds(700, 340, 200, 60);
-//        change_player.setBounds(700, 460, 200, 60);
-
 
         this.add(turn_info);
         this.add(add_piece_btn);
@@ -72,25 +61,35 @@ public class MenuPanel extends JPanel {
         this.buttons.add(add_piece_btn);
         this.buttons.add(forfeit_btn);
         this.buttons.add(btn_start);
-//        this.add(change_player);
-
 
     }
 
-
     /**
      * Adiciona uma classe que ouvirá os eventos lançados pela interface
+     *
      * @param toAdd classe que ouvirá os eventos
      */
     public void addListener(PaiShoEventListener toAdd) {
         listeners.add(toAdd);
     }
 
+    /**
+     * MandarAviso
+     *
+     * @param msg mensagem a ser enviada
+     * @param color cor da mensagem que será enviada
+     */
     public void sendMessage(String msg, Color color){
         turn_info.setText(msg);
         turn_info.setForeground(color);
     }
 
+    /**
+     * HabilitarBotões
+     * Ativa os botões da interface grafica caso seja o turno do jogador
+     *
+     * @param enable a flag que corresponde ao turno do jogador
+     */
     public void setEnableButtons(Boolean enable) {
         for (JButton button: this.buttons) {
             button.setEnabled(enable);

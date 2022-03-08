@@ -2,13 +2,17 @@ package main.java;
 
 import main.java.board.enums.PlayerNumber;
 import main.java.moveset.AddPiece;
+import main.java.moveset.MovePiece;
 import main.java.visual.GameFrame;
+import main.java.visual.TileButton;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Ator local do jogo
+ * AtorLocal
+ *
+ * Classe que maneja a interface gráfica e que interage com o usuário
  */
 public class LocalActor implements Actor, PaiShoEventListener {
     protected String name;
@@ -18,20 +22,39 @@ public class LocalActor implements Actor, PaiShoEventListener {
     protected PlayerNumber playerNumber;
     protected GameManager manager;
 
+    /**
+     * Construtor do AtorLocal
+     *
+     * @param playerNumber especifica se a interface grafica pertence ao 'jogador1' ou 'jogador2'
+     */
     public LocalActor(PlayerNumber playerNumber) {
         this.gui = new GameFrame();
         this.playerNumber = playerNumber;
         this.addListenerToGui(this);
     }
 
+    /**
+     * SetGerenciador
+     * Seta a variável que aponta para o manejador que a controla
+     */
     public void setManager (GameManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * AddListenerToGui
+     * Adiciona listener para eventos que são lançados pela interface
+     */
     public void addListenerToGui(PaiShoEventListener toAdd) {
         gui.addListenerToGui(toAdd);
     }
 
+    /**
+     * SetTurno
+     * Muda o estado da interface para que somente sejam aceitas entradas caso seja o turno do jogador
+     *
+     * @param flag boolean que indica se é turno do jogador
+     */
     public void setTurn(Boolean flag) {
         if (flag) {
             gui.sendMessage("É seu turno", Color.GREEN);
@@ -39,43 +62,87 @@ public class LocalActor implements Actor, PaiShoEventListener {
         } else {
             gui.sendMessage("Esperando jogada do adversário", Color.RED);
             gui.menuPanel.setEnableButtons(false);
-
         }
         this.turn = flag;
     }
 
+    /**
+     * IsTurn
+     * @return boolean que indica se é turno do jogador
+     */
     public Boolean isTurn() {
         return this.turn;
     }
 
+    /**
+     * MostrarAviso
+     * Envia uma mensagem arbitrária para o usuário pela interface grafica
+     */
+    public void showWarning(String message) {
+        JOptionPane.showMessageDialog(this.gui, message);
+    }
+
+    /**
+     * AdicionarPeçaEvento
+     * Tenta adicionar uma peça ao tabuleiro de acordo com o jogador atual
+     */
     @Override
     public void addPieceEvent() {
         manager.nextMove(new AddPiece(this.playerNumber));
     }
 
+    /**
+     * MoverPeçaEvento
+     * Tenta mover uma peça
+     */
     @Override
-    public void forfeitEvent() {
-
+    public void movePieceEvent(TileButton button, int x, int y) {
+        manager.nextMove(new MovePiece(this.playerNumber, button, x, y));
     }
 
+    /**
+     * MoverPeçaEvento
+     * Tenta mover uma peça para um espaço já ocupado
+     */
+    @Override
+    public void movePieceEvent(TileButton selectedPiece, TileButton targetPiece) {
+        manager.nextMove(new MovePiece(this.playerNumber, selectedPiece, targetPiece));
+    }
+
+    /**
+     * DesistenciaEvento
+     * Jogador atual desiste e perde a partida
+     */
+    @Override
+    public void forfeitEvent() {
+        //TODO
+    }
+
+    /**
+     * IniciarJogoEvento
+     * Inicia uma partida
+     */
     @Override
     public void startGameEvent() {
         manager.startGame();
     }
 
+    /**
+     * ConexãoEvento
+     * Há uma tentativa de conectar a um servidor
+     */
     @Override
     public void connectionEvent(String address, String name) {
         manager.startConnection(address, name);
     }
 
+    /**
+     * DesconexãoEvento
+     * Desconecta o jogador da partida, caso esteja em uma
+     */
     @Override
     public void disconnectionEvent() {
         manager.stopConnection();
     }
-
-    public void showWarning(String message) {
-        JOptionPane.showMessageDialog(this.gui, message);
-    }
-
 
 }
