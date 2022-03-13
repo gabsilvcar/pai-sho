@@ -47,13 +47,20 @@ public class MovePiece implements Move {
 
     @Override
     public boolean executeMove(Board board) {
+        if(board.getPiece(x1, y1).playerNumber() != this.playerNumber){
+            return false;
+        }
         return board.movePiece(x1, y1, x2, y2);
     }
 
     @Override
     public void render(GameFrame frame) {
-        frame.boardPanel.remove(tile);
-        if (target_tile != null) frame.boardPanel.remove(target_tile);
+        frame.boardPanel.remove(frame.boardPanel.get_piece(x1, y1));
+        if (target_tile != null) {
+            frame.boardPanel.remove(frame.boardPanel.get_piece(x2, y2));
+        }
+
         frame.boardPanel.createTile(x2, y2, playerNumber);
+
     }
 }

@@ -2,6 +2,7 @@ package main.java;
 
 import main.java.board.enums.PlayerNumber;
 import main.java.moveset.AddPiece;
+import main.java.moveset.Forfeit;
 import main.java.moveset.MovePiece;
 import main.java.visual.GameFrame;
 import main.java.visual.TileButton;
@@ -88,7 +89,10 @@ public class LocalActor implements Actor, PaiShoEventListener {
      */
     @Override
     public void addPieceEvent() {
-        manager.nextMove(new AddPiece(this.playerNumber));
+        if (isTurn()) {
+            manager.nextMove(new AddPiece(this.playerNumber));
+        }
+        manager.verifyWinner();
     }
 
     /**
@@ -97,8 +101,13 @@ public class LocalActor implements Actor, PaiShoEventListener {
      */
     @Override
     public void movePieceEvent(TileButton button, int x, int y) {
-        manager.nextMove(new MovePiece(this.playerNumber, button, x, y));
+        if(isTurn()){
+            manager.nextMove(new MovePiece(this.playerNumber, button, x, y));
+
+        }
+        manager.verifyWinner();
     }
+
 
     /**
      * MoverPeçaEvento
@@ -106,7 +115,10 @@ public class LocalActor implements Actor, PaiShoEventListener {
      */
     @Override
     public void movePieceEvent(TileButton selectedPiece, TileButton targetPiece) {
-        manager.nextMove(new MovePiece(this.playerNumber, selectedPiece, targetPiece));
+        if(isTurn()){
+            manager.nextMove(new MovePiece(this.playerNumber, selectedPiece, targetPiece));
+        }
+        manager.verifyWinner();
     }
 
     /**
@@ -115,7 +127,10 @@ public class LocalActor implements Actor, PaiShoEventListener {
      */
     @Override
     public void forfeitEvent() {
-        //TODO
+        if(isTurn()){
+            manager.nextMove(new Forfeit(this.playerNumber));
+        }
+        manager.verifyWinner();
     }
 
     /**

@@ -1,8 +1,7 @@
 package main.java.board;
 
 import main.java.board.enums.PlayerNumber;
-
-import javax.swing.text.Position;
+import main.java.board.Position;
 
 public class Piece {
     protected Position position;
@@ -29,5 +28,17 @@ public class Piece {
      */
     public void revokeAttackerStatus(){
         this.canAttack = false;
+    }
+
+    public Position position(){
+        return this.position;
+    }
+
+    public void setPosition(Position p){
+        this.position = p;
+    }
+
+    public PlayerNumber playerNumber(){
+        return this.playerNumber;
     }
 }

@@ -6,6 +6,7 @@ public class Position {
     protected int x, y;
     protected Quadrant quadrant;
     protected Piece piece;
+    protected Integer area;
 
     public Position(int x, int y){
         this.x = x;
@@ -20,19 +21,24 @@ public class Position {
         if(x < 0){
             if(y < 0){
                 this.quadrant = Quadrant.WHITE;
+                this.area = 1;
             }
             else{
                 this.quadrant = Quadrant.RED;
+                this.area = 2;
             }
         }else if(x > 0){
             if(y > 0){
                 this.quadrant = Quadrant.RED;
+                this.area = 3;
             }
             else{
                 this.quadrant = Quadrant.WHITE;
+                this.area = 4;
             }
         }else {
             this.quadrant = Quadrant.WOODEN;
+            this.area = 0;
         }
     }
 
@@ -59,5 +65,9 @@ public class Position {
 
     public Piece getPiece() {
         return piece;
+    }
+
+    public int area(){
+        return this.area;
     }
 }

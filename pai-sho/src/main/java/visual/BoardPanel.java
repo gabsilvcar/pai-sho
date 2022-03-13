@@ -30,6 +30,7 @@ public class BoardPanel extends JPanel {
     private ImageIcon tile_icon_alt;
     private boolean pieceMoving = false;
     private TileButton selectedPiece;
+    private ArrayList<TileButton> board_pieces;
     private final static int icon_size = 30;
     private final static int icon_offset = 2;
     public final static int[][] boardMap = {
@@ -58,7 +59,7 @@ public class BoardPanel extends JPanel {
         loadImages();
         setDoubleBuffered(true);
         setLayout(null);
-
+        this.board_pieces = new ArrayList<TileButton>();
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -152,10 +153,24 @@ public class BoardPanel extends JPanel {
             }
         });
         piece.setBounds(coordToPixel(x)+icon_offset, coordToPixel(y)+icon_offset, icon_size, icon_size);
+        this.board_pieces.add(piece);
         this.add(piece, this);
         this.repaint();
     }
 
+    public TileButton get_piece(int x, int y){
+        TileButton piece = this.board_pieces.get(0);
+        for(int i = 0; i < this.board_pieces.size(); i++){
+            if(this.board_pieces.get(i).getCoordX() == x && this.board_pieces.get(i).getCoordY() == y){
+                piece = this.board_pieces.get(i);
+                this.board_pieces.remove(piece);
+                System.out.println("chega aq");
+                return piece;
+            }
+        }
+
+        return piece;
+    }
     /**
      * AddListener
      * Adiciona o event listener que alertará as classes que um evento está ocorrendo

@@ -2,17 +2,24 @@ package main.java.board;
 
 import main.java.board.enums.PlayerNumber;
 import main.java.PaiShoEventListener;
+import org.apache.commons.collections.ListUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Board {
     protected Position[][] positions;
     private static final int size = 19;
     private static final int matrix_offset = size/2;
-    protected Player player1, player2; //TODO
+    public Player player1;
+    protected Player player2;
+    protected boolean isRunning;
 
     /**
      * Classe encarregada de cuidar das operações que ocorrem na matriz do tabuleiro
      */
     public Board(){
+        this.isRunning = true;
         this.positions = new Position[size][size];
         for(int x = 0; x < size; x++){
             for(int y = 0; y < size; y++){
@@ -21,6 +28,10 @@ public class Board {
         }
     }
 
+    public void setPlayers(PlayerNumber p1, PlayerNumber p2){
+        this.player1 = new Player(new ArrayList<Piece>(), p1);
+        this.player2 = new Player(new ArrayList<Piece>(), p2);
+    }
     /**
      * Checa se um movimento é válido.
      * Um movimento horizontal válido pode ser de até 4 casas
@@ -57,6 +68,12 @@ public class Board {
             return false;
         } else {
             this.positions[x+matrix_offset][y+matrix_offset].occupyPostition(piece);
+            piece.setPosition(this.positions[x+matrix_offset][y+matrix_offset]);
+            if (piece.playerNumber == player1.player_num){
+                player1.addActivePiece(piece);
+            } else{
+                player2.addActivePiece(piece);
+            }
             return true;
         }
     }
@@ -99,9 +116,108 @@ public class Board {
     }
 
     private boolean checkIfPiecesAreFromDifferentPlayers(int x1, int y1, int x2, int y2) {
-        return (getPiece(x1, y1).playerNumber != getPiece(x2, y2).playerNumber);
+        if (checkIfPosIsOccupied(x2, y2) && checkIfPosIsOccupied(x1, y1)){
+            return (getPiece(x1, y1).playerNumber != getPiece(x2, y2).playerNumber);
+        } else{
+            return false;
+        }
+
     }
 
+    private boolean isBetweenHarmony(Piece p1, Piece p2, Piece p3){
+        if(p1 != p3 && p2 != p3){
+            if(p1.position().getY() == p2.position().getY() && p3.position().getY() == p2.position().getY()){
+                int[] aux = {p1.position().getX(), p2.position().getX(), p3.position().getX()};
+                Arrays.sort(aux);
+                if(aux[1] ==  p3.position().getX()){
+                    return true;
+                }else {
+                    return false;
+                }
+            } else if (p1.position().getX() == p2.position().getX() && p3.position().getX() == p2.position().getX()){
+                int[] aux = {p1.position().getY(), p2.position().getY(), p3.position().getY()};
+                Arrays.sort(aux);
+                if(aux[1] ==  p3.position().getY()){
+                    return true;
+                }else {
+                    return false;
+                }
+
+                }
+             else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean verifyHarmonies(Player player1, Player player2){
+        System.out.println("contagem de harmonias iniciada");
+        ArrayList<Piece> my_pieces = player1.getActive_pieces();
+        player1.cleanHarmonies();
+
+        for (int i = 0; i < my_pieces.size(); i++){
+            ArrayList<Piece> compare_pieces = player1.getActive_pieces();
+            Piece p1 = my_pieces.get(i);
+
+            for (int k = 0; k < compare_pieces.size();k++){
+                Piece p2 = compare_pieces.get(k);
+
+                if(p1.position().getX() == p2.position().getX() || p1.position().getY() == p2.position().getY()){
+                    if(p1.position().area() != p2.position().area()) {
+
+                        ArrayList<Piece> other_pieces = player2.getActive_pieces();
+                        ArrayList<Piece> sum_pieces = (ArrayList<Piece>) ListUtils.union(my_pieces, other_pieces);
+
+                        Boolean flag = false;
+                        for (int y = 0; y < sum_pieces.size(); y++){
+                            flag = isBetweenHarmony(p1, p2, sum_pieces.get(y));
+
+                            if(flag == true){
+                                break;
+                            }
+                        }
+
+                        if(flag == false){
+                            System.out.println("Uma harmonia");
+                            player1.sumHarmonies(p1.position().area(), p2.position().area());
+                        }
+
+                    }
+                }
+            }
+
+        }
+        return (player1.amountOfHarmonies() == 4);
+    }
+
+    public void erase_player_piece(int x, int y){
+        if(getPiece(x, y).playerNumber == this.player2.player_num){
+            this.player2.removeActivePiece(getPiece(x, y));
+            this.player2.addInactivePieces(1);
+        }else{
+            this.player1.removeActivePiece(getPiece(x, y));
+            this.player1.addInactivePieces(1);
+        }
+    }
+
+    public PlayerNumber verifyHarmoniesPlayers(){
+        if(verifyHarmonies(this.player1, this.player2)){
+            return this.player1.player_num;
+        }else if(verifyHarmonies(this.player2, this.player1)){
+            return this.player2.player_num;
+        }
+        return null;
+    }
+
+    public boolean isRunning(){
+        return this.isRunning;
+    }
+
+    public void setRunning(){
+        this.isRunning = !this.isRunning;
+    }
     /**
      * Move uma peça para uma posição do tabuleiro
      *
@@ -114,20 +230,26 @@ public class Board {
      */
     public boolean movePiece(int x1, int y1, int x2, int y2) {
         //Caso para movimentos normais (sem conquistar peça)
-        if ((checkIfPosIsOccupied(x1, y1)) && (!checkIfPosIsOccupied(x2,y2)) && checkMovementValidity(x1,y1,x2,y2)) {
-            this.positions[x2+matrix_offset][y2+matrix_offset].occupyPostition(getPiece(x1,y1));
-            getPosition(x1,y1).freePosition();
-            return true;
-        }
-        //Caso para movimentos que conquistam uma peça
-        if ((checkIfPosIsOccupied(x1, y1)) && (checkIfPosIsOccupied(x2,y2)) && (checkIfPiecesAreFromDifferentPlayers(x1, y1, x2, y2))) {
-            getPosition(x2,y2).freePosition();
-            this.positions[x2+matrix_offset][y2+matrix_offset].occupyPostitionAndTakePiece(getPiece(x1,y1));
-            getPosition(x1,y1).freePosition();
-            return true;
-        }
-        System.out.println(checkIfPiecesAreFromDifferentPlayers(x1, y1, x2, y2) + "AAA");
-        return false;
+
+            if ((checkIfPosIsOccupied(x1, y1)) && (!checkIfPosIsOccupied(x2, y2)) && checkMovementValidity(x1, y1, x2, y2)) {
+                this.positions[x2 + matrix_offset][y2 + matrix_offset].occupyPostition(getPiece(x1, y1));
+                getPiece(x1, y1).setPosition(this.positions[x2 + matrix_offset][y2 + matrix_offset]);
+                getPosition(x1, y1).freePosition();
+                return true;
+            }
+            //Caso para movimentos que conquistam uma peça
+            if ((checkIfPosIsOccupied(x1, y1)) && (checkIfPosIsOccupied(x2, y2)) && (checkIfPiecesAreFromDifferentPlayers(x1, y1, x2, y2))) {
+                erase_player_piece(x2, y2);
+                getPosition(x2, y2).freePosition();
+                this.positions[x2 + matrix_offset][y2 + matrix_offset].occupyPostitionAndTakePiece(getPiece(x1, y1));
+                getPosition(x1, y1).freePosition();
+                getPiece(x2, y2).setPosition(this.positions[x2 + matrix_offset][y2 + matrix_offset]);
+
+                return true;
+            }
+            System.out.println(checkIfPiecesAreFromDifferentPlayers(x1, y1, x2, y2) + "AAA");
+            return false;
+
     }
 
 }

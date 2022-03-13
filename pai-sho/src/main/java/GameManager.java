@@ -4,8 +4,13 @@ import main.java.board.Board;
 import main.java.board.Piece;
 import main.java.board.Position;
 import main.java.board.enums.PlayerNumber;
+import main.java.moveset.AddPiece;
+import main.java.moveset.Forfeit;
 import main.java.moveset.Move;
+import main.java.moveset.MovePiece;
+import org.apache.http.impl.io.SocketOutputBuffer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +41,22 @@ public class GameManager implements Runnable {
      * @param move o tipo do movimento
      */
     public void nextMove(Move move) {
-        if (move.executeMove(board)){
-            move.render(local_player.gui);
-            remote_player.netgames.enviarJogada(move);
-            swapTurns();
-        } else {
-            System.out.println("Invalido");
-        }
+            if(move instanceof Forfeit){
+                Forfeit aux = (Forfeit) move;
+                if(this.local_player.playerNumber == aux.playerNumber()){
+                    this.local_player.winner = true;
+                }else{
+                    this.remote_player.winner = true;
+                }
+
+            }
+            if (move.executeMove(board)) {
+                move.render(local_player.gui);
+                remote_player.netgames.enviarJogada(move);
+                swapTurns();
+            } else {
+                System.out.println("Invalido");
+            }
 
     }
 
@@ -90,8 +104,11 @@ public class GameManager implements Runnable {
      * isto é feito de acordo com a ordem de entrada no servidor
      */
     public void setPlayerNumbers(int number) {
-        this.local_player.playerNumber = PlayerNumber.getPlayerNumber(number);
-        this.remote_player.playerNumber = PlayerNumber.getPlayerNumber((number % 2) + 1);
+        PlayerNumber lp = PlayerNumber.getPlayerNumber(number);
+        PlayerNumber rp = PlayerNumber.getPlayerNumber((number % 2) + 1);
+        this.local_player.playerNumber = lp;
+        this.remote_player.playerNumber = rp;
+        this.board.setPlayers(lp, rp);
         System.out.println(PlayerNumber.getPlayerNumber((number % 2) + 1));
     }
 
@@ -122,6 +139,8 @@ public class GameManager implements Runnable {
         positions.add(new Position(-6,5));
 
         for (Position pos : positions) {
+            Piece p1 = new Piece(PlayerNumber.PLAYER_TWO);
+            Piece p2 = new Piece(PlayerNumber.PLAYER_ONE);
             board.addPieceInPos(pos.getX(), pos.getY(), new Piece(PlayerNumber.PLAYER_TWO));
             local_player.gui.boardPanel.createTile(pos.getX(), pos.getY(), PlayerNumber.PLAYER_TWO);
 
@@ -130,6 +149,27 @@ public class GameManager implements Runnable {
         }
     }
 
+    public void verifyHarmonies(){
+        if(this.board.verifyHarmoniesPlayers() == local_player.playerNumber){
+            this.local_player.winner = true;
+        }else if (this.board.verifyHarmoniesPlayers() == remote_player.playerNumber){
+            this.remote_player.winner = true;
+        }
+    }
+
+    public void verifyWinner(){
+        this.verifyHarmonies();
+        if(this.local_player.winner || this.remote_player.winner){
+            PlayerNumber n = this.remote_player.playerNumber;
+            if(this.local_player.winner){
+                n = this.local_player.playerNumber;
+            }
+            local_player.showWarning("Jogador "+ n +" venceu");
+            this.board.setRunning();
+            this.remote_player.netgames.encerrarPartida();
+            this.local_player.gui.sendMessage("A partida acabou", Color.CYAN);
+        }
+    }
     /**
      * Habilita os botões da interface, não está mais sendo usado
      */
