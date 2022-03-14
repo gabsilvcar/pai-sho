@@ -146,6 +146,8 @@ public class GameManager implements Runnable {
             board.addPieceInPos(-pos.getX(), -pos.getY(), new Piece(PlayerNumber.PLAYER_ONE));
             local_player.gui.boardPanel.createTile(-pos.getX(), -pos.getY(), PlayerNumber.PLAYER_ONE);
         }
+        this.verifyHarmonies();
+        this.local_player.gui.boardPanel.setHarmonies(board.player1.getHarmony_positions(), board.player2.getHarmony_positions());
     }
 
     public void verifyHarmonies(){
