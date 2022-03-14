@@ -170,7 +170,10 @@ public class GameManager implements Runnable {
             local_player.showWarning("Jogador "+ n +" venceu");
             this.board.setRunning();
             this.remote_player.netgames.encerrarPartida();
+            this.local_player.gui.menuPanel.setEnableButtons(false);
             this.local_player.gui.sendMessage("A partida acabou", Color.CYAN);
+            System.exit(1);
+
         }
     }
     /**
