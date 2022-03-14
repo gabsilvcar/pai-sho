@@ -41,26 +41,15 @@ public class MenuPanel extends JPanel {
             }
         });
 
-        JButton btn_start = new JButton("Iniciar");
-        btn_start.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                for (PaiShoEventListener el : listeners)
-                    el.startGameEvent();
-            }
-        });
         turn_info.setBounds(700, 50, 200, 60);
         add_piece_btn.setBounds(700, 100, 200, 60);
         forfeit_btn.setBounds(700, 220, 200, 60);
-        btn_start.setBounds(700, 340, 200, 60);
 
         this.add(turn_info);
         this.add(add_piece_btn);
         this.add(forfeit_btn);
-        this.add(btn_start);
         this.buttons.add(add_piece_btn);
         this.buttons.add(forfeit_btn);
-        this.buttons.add(btn_start);
 
     }
 

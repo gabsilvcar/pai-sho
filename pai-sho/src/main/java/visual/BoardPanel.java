@@ -2,6 +2,7 @@ package main.java.visual;
 
 import main.java.PaiSho;
 import main.java.PaiShoEventListener;
+import main.java.board.Position;
 import main.java.board.enums.PlayerNumber;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class BoardPanel extends JPanel {
     private ArrayList<TileButton> board_pieces;
     private final static int icon_size = 30;
     private final static int icon_offset = 2;
+    private List<Line2D> harmony_lines = new ArrayList<Line2D>();
+    private final static int harmony_offset = 16;
     public final static int[][] boardMap = {
             {0, 0, 0, 0, 0, 0, 1, 12, 3, 3, 3, 18, 1, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 1, 1, 1, 1, 12, 3, 18, 1, 1, 1, 1, 0, 0, 0, 0},
@@ -89,8 +93,34 @@ public class BoardPanel extends JPanel {
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         drawBoard(g);
+        drawHarmonies(g);
     }
 
+    public void setHarmonies(ArrayList<ArrayList<Position>> harmonies1, ArrayList<ArrayList<Position>> harmonies2) {
+        harmony_lines = new ArrayList<Line2D>();
+        setHarmony(harmonies1);
+        setHarmony(harmonies2);
+        this.repaint();
+    }
+
+    private void setHarmony(ArrayList<ArrayList<Position>> harmonies) {
+        for (ArrayList<Position> harmony : harmonies) {
+            int x1 = coordToPixel(harmony.get(0).getX());
+            int y1 = coordToPixel(harmony.get(0).getY());
+            int x2 = coordToPixel(harmony.get(1).getX());
+            int y2 = coordToPixel(harmony.get(1).getY());
+            int h = harmony_offset;
+            harmony_lines.add(new Line2D.Double(x1+h, y1+h, x2+h, y2+h));
+        }
+    }
+    private void drawHarmonies(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        for (Line2D harmony : harmony_lines){
+            g2.setColor(Color.BLUE);
+            g2.setStroke(new BasicStroke(6f));
+            g2.draw(harmony);
+        }
+    }
     /**
      * CarregarImagens
      * Carrega os recursos em RAM para que não sejam acessados durante o jogo
@@ -164,7 +194,6 @@ public class BoardPanel extends JPanel {
             if(this.board_pieces.get(i).getCoordX() == x && this.board_pieces.get(i).getCoordY() == y){
                 piece = this.board_pieces.get(i);
                 this.board_pieces.remove(piece);
-                System.out.println("chega aq");
                 return piece;
             }
         }

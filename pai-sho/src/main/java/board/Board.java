@@ -11,8 +11,7 @@ public class Board {
     protected Position[][] positions;
     private static final int size = 19;
     private static final int matrix_offset = size/2;
-    public Player player1;
-    protected Player player2;
+    public Player player1, player2;
     protected boolean isRunning;
 
     /**
@@ -137,12 +136,7 @@ public class Board {
             } else if (p1.position().getX() == p2.position().getX() && p3.position().getX() == p2.position().getX()){
                 int[] aux = {p1.position().getY(), p2.position().getY(), p3.position().getY()};
                 Arrays.sort(aux);
-                if(aux[1] ==  p3.position().getY()){
-                    return true;
-                }else {
-                    return false;
-                }
-
+                return aux[1] == p3.position().getY();
                 }
              else {
                 return false;
@@ -152,7 +146,7 @@ public class Board {
         }
     }
 
-    public boolean verifyHarmonies(Player player1, Player player2){
+    public void verifyHarmonies(){
         System.out.println("contagem de harmonias iniciada");
         ArrayList<Piece> my_pieces = player1.getActive_pieces();
         player1.cleanHarmonies();
@@ -172,16 +166,15 @@ public class Board {
                         ArrayList<Piece> sum_pieces = (ArrayList<Piece>) ListUtils.union(my_pieces, other_pieces);
 
                         Boolean flag = false;
-                        for (int y = 0; y < sum_pieces.size(); y++){
-                            flag = isBetweenHarmony(p1, p2, sum_pieces.get(y));
+                        for (Piece sum_piece : sum_pieces) {
+                            flag = isBetweenHarmony(p1, p2, sum_piece);
 
-                            if(flag == true){
+                            if (flag) {
                                 break;
                             }
                         }
 
-                        if(flag == false){
-                            System.out.println("Uma harmonia");
+                        if(!flag){
                             player1.sumHarmonies(p1.position().area(), p2.position().area());
                             ArrayList<Position> h_positions = new ArrayList<Position>();
                             h_positions.add(p1.position());
@@ -194,7 +187,6 @@ public class Board {
             }
 
         }
-        return (player1.amountOfHarmonies() == 4);
     }
 
     public void erase_player_piece(int x, int y){
@@ -208,9 +200,10 @@ public class Board {
     }
 
     public PlayerNumber verifyHarmoniesPlayers(){
-        if(verifyHarmonies(this.player1, this.player2)){
+        verifyHarmonies();
+        if(player1.amountOfHarmonies() == 4){
             return this.player1.player_num;
-        }else if(verifyHarmonies(this.player2, this.player1)){
+        }else if(player2.amountOfHarmonies() == 4){
             return this.player2.player_num;
         }
         return null;
@@ -252,7 +245,6 @@ public class Board {
 
                 return true;
             }
-            System.out.println(checkIfPiecesAreFromDifferentPlayers(x1, y1, x2, y2) + "AAA");
             return false;
 
     }

@@ -4,11 +4,8 @@ import main.java.board.Board;
 import main.java.board.Piece;
 import main.java.board.Position;
 import main.java.board.enums.PlayerNumber;
-import main.java.moveset.AddPiece;
 import main.java.moveset.Forfeit;
 import main.java.moveset.Move;
-import main.java.moveset.MovePiece;
-import org.apache.http.impl.io.SocketOutputBuffer;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -41,23 +38,24 @@ public class GameManager implements Runnable {
      * @param move o tipo do movimento
      */
     public void nextMove(Move move) {
-            if(move instanceof Forfeit){
-                Forfeit aux = (Forfeit) move;
-                if(this.local_player.playerNumber == aux.playerNumber()){
-                    this.local_player.winner = true;
-                }else{
-                    this.remote_player.winner = true;
-                }
-
+        if(move instanceof Forfeit){
+            Forfeit aux = (Forfeit) move;
+            if(this.local_player.playerNumber == aux.playerNumber()){
+                this.local_player.winner = true;
+            }else{
+                this.remote_player.winner = true;
             }
-            if (move.executeMove(board)) {
-                move.render(local_player.gui);
-                remote_player.netgames.enviarJogada(move);
-                swapTurns();
-            } else {
-                System.out.println("Invalido");
-            }
-            this.verifyWinner();
+        }
+        if (move.executeMove(board)) {
+            move.render(local_player.gui);
+            remote_player.netgames.enviarJogada(move);
+            swapTurns();
+        } else {
+            System.out.println("Invalido");
+        }
+        this.verifyHarmonies();
+        this.local_player.gui.boardPanel.setHarmonies(board.player1.getHarmony_positions(), board.player2.getHarmony_positions());
+        this.verifyWinner();
 
     }
 
@@ -159,7 +157,6 @@ public class GameManager implements Runnable {
     }
 
     public void verifyWinner(){
-        this.verifyHarmonies();
         if(this.local_player.winner || this.remote_player.winner){
             PlayerNumber n = this.remote_player.playerNumber;
             if(this.local_player.winner){
