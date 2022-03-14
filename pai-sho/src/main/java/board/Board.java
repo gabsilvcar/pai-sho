@@ -3,7 +3,7 @@ package main.java.board;
 import main.java.board.enums.PlayerNumber;
 import main.java.PaiShoEventListener;
 import org.apache.commons.collections.ListUtils;
-
+import main.java.board.Piece;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -146,14 +146,14 @@ public class Board {
         }
     }
 
-    public void verifyHarmonies(){
+    public void verifyHarmonies(Player pl1, Player pl2){
         System.out.println("contagem de harmonias iniciada");
-        ArrayList<Piece> my_pieces = player1.getActive_pieces();
-        player1.cleanHarmonies();
-        player1.clearHarmonyPosition();
+        ArrayList<Piece> my_pieces = pl1.getActive_pieces();
+        pl1.cleanHarmonies();
+        pl1.clearHarmonyPosition();
 
         for (int i = 0; i < my_pieces.size(); i++){
-            ArrayList<Piece> compare_pieces = player1.getActive_pieces();
+            ArrayList<Piece> compare_pieces = pl1.getActive_pieces();
             Piece p1 = my_pieces.get(i);
 
             for (int k = 0; k < compare_pieces.size();k++){
@@ -162,7 +162,7 @@ public class Board {
                 if(p1.position().getX() == p2.position().getX() || p1.position().getY() == p2.position().getY()){
                     if(p1.position().area() != p2.position().area()) {
 
-                        ArrayList<Piece> other_pieces = player2.getActive_pieces();
+                        ArrayList<Piece> other_pieces = pl2.getActive_pieces();
                         ArrayList<Piece> sum_pieces = (ArrayList<Piece>) ListUtils.union(my_pieces, other_pieces);
 
                         Boolean flag = false;
@@ -175,11 +175,11 @@ public class Board {
                         }
 
                         if(!flag){
-                            player1.sumHarmonies(p1.position().area(), p2.position().area());
+                            pl1.sumHarmonies(p1.position().area(), p2.position().area());
                             ArrayList<Position> h_positions = new ArrayList<Position>();
                             h_positions.add(p1.position());
                             h_positions.add(p2.position());
-                            player1.addHarmonyPosition(h_positions);
+                            pl1.addHarmonyPosition(h_positions);
                         }
 
                     }
@@ -200,7 +200,8 @@ public class Board {
     }
 
     public PlayerNumber verifyHarmoniesPlayers(){
-        verifyHarmonies();
+        verifyHarmonies(player1, player2);
+        verifyHarmonies(player2, player1);
         if(player1.amountOfHarmonies() == 4){
             return this.player1.player_num;
         }else if(player2.amountOfHarmonies() == 4){

@@ -94,6 +94,7 @@ public class GameManager implements Runnable {
      * Inicializa a partida via netgames
      */
     public void startGame() {
+
         remote_player.netgames.iniciarPartida();
     }
 
@@ -119,6 +120,8 @@ public class GameManager implements Runnable {
         Boolean flag = (local_player.playerNumber == PlayerNumber.PLAYER_ONE);
         local_player.setTurn(flag);
         remote_player.setTurn(!flag);
+        local_player.winner = false;
+        remote_player.winner = false;
         addStarterTiles();
     }
 
