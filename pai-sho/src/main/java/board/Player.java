@@ -12,7 +12,7 @@ public class Player {
     protected int inactive_pieces;
     protected PlayerNumber player_num;
     protected Hashtable<String, Integer> harmonies;
-
+    protected ArrayList<ArrayList<Position>> harmony_positions;
     public Player(ArrayList<Piece> active_pieces, PlayerNumber player_num){
         this.active_pieces = active_pieces;
         this.player_num = player_num;
@@ -22,6 +22,8 @@ public class Player {
         this.harmonies.put("3_2", 0);
         this.harmonies.put("4_3", 0);
         this.harmonies.put("4_1", 0);
+        this.harmony_positions = new ArrayList<ArrayList<Position>>();
+
     }
     public void addActivePiece(Piece p){
         this.active_pieces.add(p);
@@ -66,5 +68,14 @@ public class Player {
                 this.harmonies.get("3_2")+
                 this.harmonies.get("4_3")+
                 this.harmonies.get("4_1"));
+    }
+    public void addHarmonyPosition(ArrayList<Position> positions){
+        this.harmony_positions.add(positions);
+    }
+    public void clearHarmonyPosition(){
+        this.harmony_positions.clear();
+    }
+    public ArrayList<ArrayList<Position>> getHarmony_positions(){
+        return this.harmony_positions;
     }
 }

@@ -156,6 +156,7 @@ public class Board {
         System.out.println("contagem de harmonias iniciada");
         ArrayList<Piece> my_pieces = player1.getActive_pieces();
         player1.cleanHarmonies();
+        player1.clearHarmonyPosition();
 
         for (int i = 0; i < my_pieces.size(); i++){
             ArrayList<Piece> compare_pieces = player1.getActive_pieces();
@@ -182,6 +183,10 @@ public class Board {
                         if(flag == false){
                             System.out.println("Uma harmonia");
                             player1.sumHarmonies(p1.position().area(), p2.position().area());
+                            ArrayList<Position> h_positions = new ArrayList<Position>();
+                            h_positions.add(p1.position());
+                            h_positions.add(p2.position());
+                            player1.addHarmonyPosition(h_positions);
                         }
 
                     }

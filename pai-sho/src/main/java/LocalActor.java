@@ -92,7 +92,7 @@ public class LocalActor implements Actor, PaiShoEventListener {
         if (isTurn()) {
             manager.nextMove(new AddPiece(this.playerNumber));
         }
-        manager.verifyWinner();
+
     }
 
     /**
@@ -105,7 +105,7 @@ public class LocalActor implements Actor, PaiShoEventListener {
             manager.nextMove(new MovePiece(this.playerNumber, button, x, y));
 
         }
-        manager.verifyWinner();
+
     }
 
 
@@ -118,7 +118,7 @@ public class LocalActor implements Actor, PaiShoEventListener {
         if(isTurn()){
             manager.nextMove(new MovePiece(this.playerNumber, selectedPiece, targetPiece));
         }
-        manager.verifyWinner();
+
     }
 
     /**
@@ -130,7 +130,7 @@ public class LocalActor implements Actor, PaiShoEventListener {
         if(isTurn()){
             manager.nextMove(new Forfeit(this.playerNumber));
         }
-        manager.verifyWinner();
+
     }
 
     /**

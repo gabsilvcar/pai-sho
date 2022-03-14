@@ -57,6 +57,7 @@ public class GameManager implements Runnable {
             } else {
                 System.out.println("Invalido");
             }
+            this.verifyWinner();
 
     }
 
