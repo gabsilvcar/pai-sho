@@ -9,8 +9,8 @@ import java.util.Arrays;
 
 public class Board {
     protected Position[][] positions;
-    private static final int size = 19;
-    private static final int matrix_offset = size/2;
+    protected static final int size = 19;
+    protected static final int matrix_offset = size/2;
     public Player player1, player2;
     protected boolean isRunning;
 
